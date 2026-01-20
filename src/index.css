@@ -1,0 +1,28 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary-light: #4ade80;
+  --color-primary: #16a34a;
+  --color-primary-dark: #15803d;
+
+  --color-neutral-bg: #f8fafc;
+  --color-neutral-text: #1e293b;
+  --color-neutral-muted: #64748b;
+}
+
+/* Global Styles */
+body {
+  background-color: var(--color-neutral-bg);
+  color: var(--color-neutral-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
