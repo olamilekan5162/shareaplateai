@@ -14,6 +14,7 @@ import {
   MyClaimsPage,
   ImpactPage,
 } from "./pages/dashboard";
+import { NotificationsPage } from "./pages/dashboard/NotificationsPage";
 
 function ProtectedRoute({ children, allowedRoles = [] }) {
   const { user, loading } = useAuth();
@@ -64,6 +65,7 @@ export default function App() {
             <Route path="listings" element={<MyListingsPage />} />
             <Route path="claims" element={<MyClaimsPage />} />
             <Route path="impact" element={<ImpactPage />} />
+            <Route path="notifications" element={<NotificationsPage />} />
             {/* Catch all for dashboard */}
             <Route path="*" element={<Navigate to="/dashboard" />} />
           </Route>
