@@ -5,16 +5,6 @@ import { DashboardLayout } from "./layouts/DashboardLayout";
 import { LandingPage } from "./pages/LandingPage";
 import { LoginPage } from "./pages/auth/LoginPage";
 import { RegisterPage } from "./pages/auth/RegisterPage";
-import {
-  DonorDashboard,
-  RecipientDashboard,
-  VolunteerDashboard,
-  AddListingPage,
-  MyListingsPage,
-  MyClaimsPage,
-  ImpactPage,
-} from "./pages/dashboard";
-import { NotificationsPage } from "./pages/dashboard/NotificationsPage";
 
 function ProtectedRoute({ children, allowedRoles = [] }) {
   const { user, loading } = useAuth();
@@ -28,16 +18,6 @@ function ProtectedRoute({ children, allowedRoles = [] }) {
   return children;
 }
 
-function DashboardRouting() {
-  const { user } = useAuth();
-  if (!user) return null;
-
-  if (user.role === "donor") return <DonorDashboard />;
-  if (user.role === "recipient") return <RecipientDashboard />;
-  if (user.role === "volunteer") return <VolunteerDashboard />;
-  return <div>Unknown role</div>;
-}
-
 export default function App() {
   return (
     <AuthProvider>
@@ -47,28 +27,8 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route path="/" element={<LandingPage />} />
           </Route>
-
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-
-          {/* Protected Dashboard Routes */}
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardLayout />
-              </ProtectedRoute>
-            }
-          >
-            <Route index element={<DashboardRouting />} />
-            <Route path="add" element={<AddListingPage />} />
-            <Route path="listings" element={<MyListingsPage />} />
-            <Route path="claims" element={<MyClaimsPage />} />
-            <Route path="impact" element={<ImpactPage />} />
-            <Route path="notifications" element={<NotificationsPage />} />
-            {/* Catch all for dashboard */}
-            <Route path="*" element={<Navigate to="/dashboard" />} />
-          </Route>
         </Routes>
       </BrowserRouter>
     </AuthProvider>
