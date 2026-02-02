@@ -12,17 +12,24 @@ import {
 } from "react-icons/fi";
 import { useClaims } from "../../hooks/useClaims";
 import { ClaimStatusBadge } from "../../components/ClaimStatusBadge";
+import toast from "react-hot-toast";
+import { useState } from "react";
 
 export function MyClaimsPage() {
   const { claims, loading, cancelClaim } = useClaims();
+  const [cancelling, setCancelling] = useState(null);
 
   const handleCancelClaim = async (claimId) => {
     if (confirm("Are you sure you want to cancel this claim?")) {
-      const { error } = await cancelClaim(claimId);
-      if (error) {
-        alert(`Failed to cancel: ${error}`);
-      } else {
-        alert("Claim cancelled successfully");
+      setCancelling(claimId);
+      try {
+        await toast.promise(cancelClaim(claimId), {
+          loading: "Cancelling claim...",
+          success: "Claim cancelled successfully",
+          error: (err) => `Failed to cancel: ${err.message}`,
+        });
+      } finally {
+        setCancelling(null);
       }
     }
   };
@@ -107,9 +114,14 @@ export function MyClaimsPage() {
                         variant="danger"
                         size="sm"
                         onClick={() => handleCancelClaim(claim.id)}
+                        disabled={cancelling === claim.id}
                         className="flex items-center gap-2"
                       >
-                        <FiX size={16} />
+                        {cancelling === claim.id ? (
+                          <span className="animate-spin">⏳</span>
+                        ) : (
+                          <FiX size={16} />
+                        )}
                         Cancel Claim
                       </Button>
                     </div>
@@ -123,9 +135,14 @@ export function MyClaimsPage() {
                         variant="danger"
                         size="sm"
                         onClick={() => handleCancelClaim(claim.id)}
+                        disabled={cancelling === claim.id}
                         className="flex items-center gap-2"
                       >
-                        <FiX size={16} />
+                        {cancelling === claim.id ? (
+                          <span className="animate-spin">⏳</span>
+                        ) : (
+                          <FiX size={16} />
+                        )}
                         Cancel Claim
                       </Button>
                     </div>

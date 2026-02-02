@@ -3,6 +3,8 @@ import { FiX, FiTarget } from "react-icons/fi";
 import { useGoals } from "../hooks/useGoals";
 import { useAuth } from "../hooks/useAuth";
 
+import toast from "react-hot-toast";
+
 export function GoalPrompt({ onClose, onComplete }) {
   const { user } = useAuth();
   const { createGoal } = useGoals();
@@ -48,7 +50,7 @@ export function GoalPrompt({ onClose, onComplete }) {
       onClose();
     } catch (err) {
       console.error("Failed to create goal:", err);
-      alert("Failed to create goal. Please try again.");
+      toast.error("Failed to create goal. Please try again.");
     } finally {
       setLoading(false);
     }

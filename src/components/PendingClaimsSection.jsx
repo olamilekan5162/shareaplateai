@@ -5,6 +5,7 @@ import { FiCheck, FiX, FiCheckCircle } from "react-icons/fi";
 import { useClaims } from "../hooks/useClaims";
 import { useAuth } from "../hooks/useAuth";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 export function PendingClaimsSection() {
   const { user } = useAuth();
@@ -12,12 +13,13 @@ export function PendingClaimsSection() {
     useClaims();
   const [pendingClaims, setPendingClaims] = useState([]);
   const [confirmedClaims, setConfirmedClaims] = useState([]);
+  const [actionLoading, setActionLoading] = useState(null);
 
   useEffect(() => {
     if (claims && claims.length > 0) {
       // Filter claims for listings owned by this donor
       const donorClaims = claims.filter(
-        (claim) => claim.listing?.donor_id === user?.id,
+        (claim) => claim.listing?.donor_id === user?.id
       );
 
       setPendingClaims(donorClaims.filter((c) => c.status === "pending"));
@@ -26,21 +28,29 @@ export function PendingClaimsSection() {
   }, [claims, user]);
 
   const handleApprove = async (claimId) => {
-    const { error } = await approveClaim(claimId);
-    if (error) {
-      alert(`Failed to approve: ${error}`);
-    } else {
-      alert("Claim approved successfully!");
+    setActionLoading(claimId);
+    try {
+      await toast.promise(approveClaim(claimId), {
+        loading: "Approving claim...",
+        success: "Claim approved successfully!",
+        error: (err) => `Failed to approve: ${err.message}`,
+      });
+    } finally {
+      setActionLoading(null);
     }
   };
 
   const handleReject = async (claimId) => {
     if (confirm("Are you sure you want to reject this claim?")) {
-      const { error } = await rejectClaim(claimId);
-      if (error) {
-        alert(`Failed to reject: ${error}`);
-      } else {
-        alert("Claim rejected. Listing is now available for others.");
+      setActionLoading(claimId);
+      try {
+        await toast.promise(rejectClaim(claimId), {
+          loading: "Rejecting claim...",
+          success: "Claim rejected. Listing is now available for others.",
+          error: (err) => `Failed to reject: ${err.message}`,
+        });
+      } finally {
+        setActionLoading(null);
       }
     }
   };
@@ -48,14 +58,18 @@ export function PendingClaimsSection() {
   const handleComplete = async (claimId) => {
     if (
       confirm(
-        "Mark this claim as completed? This confirms the food was picked up.",
+        "Mark this claim as completed? This confirms the food was picked up."
       )
     ) {
-      const { error } = await completeClaim(claimId);
-      if (error) {
-        alert(`Failed to complete: ${error}`);
-      } else {
-        alert("Claim marked as completed!");
+      setActionLoading(claimId);
+      try {
+        await toast.promise(completeClaim(claimId), {
+          loading: "Completing claim...",
+          success: "Claim marked as completed!",
+          error: (err) => `Failed to complete: ${err.message}`,
+        });
+      } finally {
+        setActionLoading(null);
       }
     }
   };
@@ -118,15 +132,21 @@ export function PendingClaimsSection() {
                       <Button
                         size="sm"
                         onClick={() => handleApprove(claim.id)}
+                        disabled={actionLoading === claim.id}
                         className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
                       >
-                        <FiCheck size={16} />
+                        {actionLoading === claim.id ? (
+                          <span className="animate-spin text-white">⏳</span>
+                        ) : (
+                          <FiCheck size={16} />
+                        )}
                         Approve
                       </Button>
                       <Button
                         variant="danger"
                         size="sm"
                         onClick={() => handleReject(claim.id)}
+                        disabled={actionLoading === claim.id}
                         className="flex items-center gap-1"
                       >
                         <FiX size={16} />
@@ -172,15 +192,21 @@ export function PendingClaimsSection() {
                       <Button
                         size="sm"
                         onClick={() => handleComplete(claim.id)}
+                        disabled={actionLoading === claim.id}
                         className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
                       >
-                        <FiCheckCircle size={16} />
+                        {actionLoading === claim.id ? (
+                          <span className="animate-spin text-white">⏳</span>
+                        ) : (
+                          <FiCheckCircle size={16} />
+                        )}
                         Mark Completed
                       </Button>
                       <Button
                         variant="danger"
                         size="sm"
                         onClick={() => handleReject(claim.id)}
+                        disabled={actionLoading === claim.id}
                         className="flex items-center gap-1"
                       >
                         <FiX size={16} />

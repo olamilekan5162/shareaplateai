@@ -1,6 +1,7 @@
 import { FiTarget, FiTrendingUp, FiEdit2, FiTrash2, FiX } from "react-icons/fi";
 import { useGoals } from "../hooks/useGoals";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 export function GoalProgress() {
   const { progress, loading, updateGoal, deleteGoal } = useGoals();
@@ -20,16 +21,28 @@ export function GoalProgress() {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-    await updateGoal(editingGoal.id, {
+    const updatePromise = updateGoal(editingGoal.id, {
       target_value: parseInt(formData.target_value),
       timeframe: formData.timeframe,
     });
+
+    await toast.promise(updatePromise, {
+      loading: "Updating goal...",
+      success: "Goal updated successfully",
+      error: "Failed to update goal",
+    });
+
     setEditingGoal(null);
   };
 
   const handleDelete = async (goalId) => {
     if (confirm("Are you sure you want to delete this goal?")) {
-      await deleteGoal(goalId);
+      const deletePromise = deleteGoal(goalId);
+      await toast.promise(deletePromise, {
+        loading: "Deleting goal...",
+        success: "Goal deleted successfully",
+        error: "Failed to delete goal",
+      });
     }
   };
 
@@ -64,7 +77,9 @@ export function GoalProgress() {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`p-2 rounded-lg ${isComplete ? "bg-green-100" : "bg-gray-50 text-gray-400"}`}
+                    className={`p-2 rounded-lg ${
+                      isComplete ? "bg-green-100" : "bg-gray-50 text-gray-400"
+                    }`}
                   >
                     {isComplete ? (
                       <FiTrendingUp size={20} className="text-green-600" />

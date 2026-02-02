@@ -6,6 +6,7 @@ import { FiPlus, FiArchive } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useListings } from "../../hooks/useListings";
 import { useAuth } from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 export function MyListingsPage() {
   const navigate = useNavigate();
@@ -57,7 +58,7 @@ export function MyListingsPage() {
               key={listing.id}
               listing={transformListing(listing)}
               isDonor={true}
-              onAction={() => alert("Edit feature coming soon")}
+              onAction={() => toast("Edit feature coming soon!")}
             />
           ))}
         </div>

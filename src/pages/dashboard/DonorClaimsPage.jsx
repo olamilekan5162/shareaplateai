@@ -5,31 +5,42 @@ import { EmptyState } from "../../components/EmptyState";
 import { ClaimStatusBadge } from "../../components/ClaimStatusBadge";
 import { FiPackage, FiCheck, FiX, FiCheckCircle } from "react-icons/fi";
 import { useDonorClaims } from "../../hooks/useDonorClaims";
+import toast from "react-hot-toast";
+import { useState } from "react";
 
 export function DonorClaimsPage() {
   const { claims, loading, approveClaim, rejectClaim, completeClaim } =
     useDonorClaims();
+  const [actionLoading, setActionLoading] = useState(null);
 
   const handleApprove = async (claimId) => {
-    const { error } = await approveClaim(claimId);
-    if (error) {
-      alert(`Failed to approve: ${error}`);
-    } else {
-      alert("Claim approved successfully!");
+    setActionLoading(claimId);
+    try {
+      await toast.promise(approveClaim(claimId), {
+        loading: "Approving claim...",
+        success: "Claim approved successfully!",
+        error: (err) => `Failed to approve: ${err.message}`,
+      });
+    } finally {
+      setActionLoading(null);
     }
   };
 
   const handleReject = async (claimId) => {
     if (
       confirm(
-        "Are you sure you want to reject this claim? The listing will become available for others.",
+        "Are you sure you want to reject this claim? The listing will become available for others."
       )
     ) {
-      const { error } = await rejectClaim(claimId);
-      if (error) {
-        alert(`Failed to reject: ${error}`);
-      } else {
-        alert("Claim rejected. Listing is now available.");
+      setActionLoading(claimId);
+      try {
+        await toast.promise(rejectClaim(claimId), {
+          loading: "Rejecting claim...",
+          success: "Claim rejected. Listing is now available.",
+          error: (err) => `Failed to reject: ${err.message}`,
+        });
+      } finally {
+        setActionLoading(null);
       }
     }
   };
@@ -37,14 +48,18 @@ export function DonorClaimsPage() {
   const handleComplete = async (claimId) => {
     if (
       confirm(
-        "Mark this claim as completed? This confirms the food was picked up.",
+        "Mark this claim as completed? This confirms the food was picked up."
       )
     ) {
-      const { error } = await completeClaim(claimId);
-      if (error) {
-        alert(`Failed to complete: ${error}`);
-      } else {
-        alert("Claim marked as completed!");
+      setActionLoading(claimId);
+      try {
+        await toast.promise(completeClaim(claimId), {
+          loading: "Completing claim...",
+          success: "Claim marked as completed!",
+          error: (err) => `Failed to complete: ${err.message}`,
+        });
+      } finally {
+        setActionLoading(null);
       }
     }
   };
@@ -120,9 +135,16 @@ export function DonorClaimsPage() {
                             <Button
                               size="sm"
                               onClick={() => handleApprove(claim.id)}
+                              disabled={actionLoading === claim.id}
                               className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
                             >
-                              <FiCheck size={16} />
+                              {actionLoading === claim.id ? (
+                                <span className="animate-spin text-white">
+                                  ⏳
+                                </span>
+                              ) : (
+                                <FiCheck size={16} />
+                              )}
                               Approve
                             </Button>
                           </div>
@@ -131,6 +153,7 @@ export function DonorClaimsPage() {
                               variant="danger"
                               size="sm"
                               onClick={() => handleReject(claim.id)}
+                              disabled={actionLoading === claim.id}
                               className="flex items-center gap-1"
                             >
                               <FiX size={16} />
@@ -185,9 +208,16 @@ export function DonorClaimsPage() {
                             <Button
                               size="sm"
                               onClick={() => handleComplete(claim.id)}
+                              disabled={actionLoading === claim.id}
                               className="flex items-center gap-1 bg-green-600 hover:bg-green-700"
                             >
-                              <FiCheckCircle size={16} />
+                              {actionLoading === claim.id ? (
+                                <span className="animate-spin text-white">
+                                  ⏳
+                                </span>
+                              ) : (
+                                <FiCheckCircle size={16} />
+                              )}
                               Mark Completed
                             </Button>
                           </div>
@@ -196,6 +226,7 @@ export function DonorClaimsPage() {
                               variant="danger"
                               size="sm"
                               onClick={() => handleReject(claim.id)}
+                              disabled={actionLoading === claim.id}
                               className="flex items-center gap-1"
                             >
                               <FiX size={16} />

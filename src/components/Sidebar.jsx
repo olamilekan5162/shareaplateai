@@ -20,7 +20,7 @@ export function Sidebar({ user, onLogout, className }) {
     { name: "My Listings", href: "/dashboard/listings", icon: FiList },
     { name: "Add Food", href: "/dashboard/add", icon: FiPlusCircle },
     { name: "Claim Requests", href: "/dashboard/donor-claims", icon: FiBell },
-    { name: "Impact", href: "/dashboard/impact", icon: FiHeart },
+    // { name: "Impact", href: "/dashboard/impact", icon: FiHeart },
   ];
 
   const recipientLinks = [
@@ -48,7 +48,7 @@ export function Sidebar({ user, onLogout, className }) {
     <div
       className={cn(
         "hidden md:flex flex-col w-64 border-r border-gray-100 bg-white h-screen sticky top-0",
-        className,
+        className
       )}
     >
       <div className="p-6 h-16 flex items-center border-b border-gray-100">
@@ -67,7 +67,7 @@ export function Sidebar({ user, onLogout, className }) {
               "flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors relative",
               location.pathname === link.href
                 ? "bg-primary/10 text-primary-dark"
-                : "text-neutral-text hover:bg-gray-50 hover:text-primary",
+                : "text-neutral-text hover:bg-gray-50 hover:text-primary"
             )}
           >
             <link.icon size={18} />
@@ -78,7 +78,7 @@ export function Sidebar({ user, onLogout, className }) {
                   "px-2 py-0.5 rounded-full text-xs font-bold",
                   link.badge > 0
                     ? "bg-red-500 text-white"
-                    : "bg-gray-100 text-gray-500",
+                    : "bg-gray-100 text-gray-500"
                 )}
               >
                 {link.badge}

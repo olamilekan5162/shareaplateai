@@ -12,6 +12,7 @@ import { supabase } from "../../lib/supabase";
 import { GoalProgress } from "../../components/GoalProgress";
 import { GoalPrompt } from "../../components/GoalPrompt";
 import { useGoals } from "../../hooks/useGoals";
+import toast from "react-hot-toast";
 
 export function RecipientDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -74,8 +75,7 @@ export function RecipientDashboard() {
 
     // Check if current user has an active claim on this listing
     const userActiveClaim = claims?.find(
-      (claim) =>
-        claim.listing_id === listing.id && claim.status !== "cancelled",
+      (claim) => claim.listing_id === listing.id && claim.status !== "cancelled"
     );
 
     if (userActiveClaim) {
@@ -84,15 +84,17 @@ export function RecipientDashboard() {
     }
 
     setClaiming(listing.id);
+    const claimPromise = createClaim(listing.id);
+
     try {
-      const { error } = await createClaim(listing.id);
-      if (error) {
-        alert(`Failed to claim: ${error}`);
-      } else {
-        alert("Food claimed successfully! Check 'My Claims' to see details.");
-      }
+      await toast.promise(claimPromise, {
+        loading: "Claiming food...",
+        success:
+          "Food claimed successfully! Check 'My Claims' for pickup details.",
+        error: (err) => `Failed to claim: ${err.message}`,
+      });
     } catch (err) {
-      alert(`Error: ${err.message}`);
+      // Error handled by toast
     } finally {
       setClaiming(null);
     }
@@ -167,6 +169,7 @@ export function RecipientDashboard() {
                   onAction={() => handleClaim(listing)}
                   isDonor={false}
                   actionDisabled={isListingClaimed(listing)}
+                  isLoading={claiming === listing.id}
                   actionLabel={
                     isListingClaimed(listing) ? "Claimed" : "Claim Food"
                   }
@@ -191,6 +194,7 @@ export function RecipientDashboard() {
               onAction={() => handleClaim(listing)}
               isDonor={false}
               actionDisabled={isListingClaimed(listing)}
+              isLoading={claiming === listing.id}
               actionLabel={isListingClaimed(listing) ? "Claimed" : "Claim Food"}
             />
           ))}

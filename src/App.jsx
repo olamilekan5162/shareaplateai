@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { Toaster } from "react-hot-toast";
 import { AuthProvider, useAuth } from "./hooks/useAuth";
 import { MainLayout } from "./layouts/MainLayout";
 import { DashboardLayout } from "./layouts/DashboardLayout";
@@ -42,6 +43,7 @@ function DashboardRouting() {
 export default function App() {
   return (
     <AuthProvider>
+      <Toaster position="top-right" />
       <BrowserRouter>
         <Routes>
           {/* Public Routes */}

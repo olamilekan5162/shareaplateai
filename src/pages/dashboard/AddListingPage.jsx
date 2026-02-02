@@ -9,14 +9,13 @@ import { useListings } from "../../hooks/useListings";
 import { supabase } from "../../lib/supabase";
 import { FiUpload, FiX } from "react-icons/fi";
 import { getLocationOptions, LOCATION_HINT } from "../../constants/locations";
+import toast from "react-hot-toast";
 
 export function AddListingPage() {
   const navigate = useNavigate();
   const { createListing } = useListings();
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [formData, setFormData] = useState({
@@ -57,7 +56,7 @@ export function AddListingPage() {
 
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
-        setError("Image size should be less than 5MB");
+        toast.error("Image size should be less than 5MB");
         return;
       }
 
@@ -89,9 +88,17 @@ export function AddListingPage() {
         .substring(2)}-${Date.now()}.${fileExt}`;
       const filePath = `food-listings/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
+      const uploadPromise = supabase.storage
         .from("food-images")
         .upload(filePath, imageFile);
+
+      await toast.promise(uploadPromise, {
+        loading: "Uploading image...",
+        success: "Image uploaded!",
+        error: "Failed to upload image",
+      });
+
+      const { error: uploadError } = await uploadPromise;
 
       if (uploadError) throw uploadError;
 
@@ -120,8 +127,6 @@ export function AddListingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
     setLoading(true);
 
     try {
@@ -131,7 +136,7 @@ export function AddListingPage() {
         imageUrl = await uploadImage();
       }
 
-      const { data, error: submitError } = await createListing({
+      const createPromise = createListing({
         title: formData.title,
         food_type: formData.food_type,
         quantity: formData.quantity,
@@ -143,15 +148,21 @@ export function AddListingPage() {
         status: "available",
       });
 
+      const { data, error: submitError } = await toast.promise(createPromise, {
+        loading: "Creating listing...",
+        success: "Listing posted successfully!",
+        error: "Failed to post listing",
+      });
+
       if (submitError) throw new Error(submitError);
 
       // ============================================
       // AUTONOMOUS AI MATCHING
       // ============================================
       if (data) {
-        setSuccess(
-          "✅ Listing posted successfully! AI is finding the best recipients..."
-        );
+        toast.loading("AI is finding the best recipients...", {
+          duration: 2000,
+        });
 
         // Trigger AI matching in background
         const { data: recipients } = await supabase
@@ -176,25 +187,22 @@ export function AddListingPage() {
             const result = await response.json();
 
             if (result.success && result.notifiedCount > 0) {
-              setSuccess(
-                `✅ Success! ${result.notifiedCount} recipients have been notified about your donation.`
+              toast.success(
+                `Success! ${result.notifiedCount} recipients have been notified about your donation.`
               );
             } else {
-              setSuccess("✅ Listing posted! AI matching complete.");
+              toast.success("AI matching complete.");
             }
           } catch (aiError) {
             console.error("AI matching error:", aiError);
-            setSuccess("✅ Listing posted successfully!");
           }
-        } else {
-          setSuccess("✅ Listing posted successfully!");
         }
 
         // Redirect after showing success message
         setTimeout(() => navigate("/dashboard"), 2000);
       }
     } catch (err) {
-      setError(err.message || "Failed to create listing");
+      toast.error(err.message || "Failed to create listing");
     } finally {
       setLoading(false);
     }
@@ -360,18 +368,6 @@ export function AddListingPage() {
                 onChange={handleChange}
               />
             </div>
-
-            {error && (
-              <div className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-100">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="text-sm text-green-600 bg-green-50 p-3 rounded-lg border border-green-100">
-                {success}
-              </div>
-            )}
 
             <div className="flex justify-end gap-3 pt-4 border-t border-gray-100">
               <Button

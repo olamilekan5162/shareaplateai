@@ -2,8 +2,10 @@ import { Button } from "../components/Button";
 import { Card, CardContent } from "../components/Card";
 import { Link } from "react-router-dom";
 import { FiHeart, FiMapPin, FiTruck } from "react-icons/fi";
+import { useAuth } from "../hooks/useAuth";
 
 export function LandingPage() {
+  const { user } = useAuth();
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
@@ -22,7 +24,7 @@ export function LandingPage() {
             and need.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/register">
+            <Link to={user ? "/dashboard" : "/register"}>
               <Button
                 size="lg"
                 className="w-full sm:w-auto text-lg px-8 py-4 shadow-lg shadow-primary/20"
