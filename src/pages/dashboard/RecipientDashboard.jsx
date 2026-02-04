@@ -13,6 +13,7 @@ import { GoalProgress } from "../../components/GoalProgress";
 import { GoalPrompt } from "../../components/GoalPrompt";
 import { useGoals } from "../../hooks/useGoals";
 import toast from "react-hot-toast";
+import { ImpactCoach } from "../../components/ImpactCoach";
 
 export function RecipientDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -110,6 +111,14 @@ export function RecipientDashboard() {
       <PageHeader
         title="Browse Food"
         description="Find and claim available food across your community."
+      />
+
+      <ImpactCoach
+        role="recipient"
+        stats={{
+          claims: claims.length,
+        }}
+        goals={goals}
       />
 
       {/* Filters */}

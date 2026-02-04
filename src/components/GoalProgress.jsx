@@ -77,9 +77,7 @@ export function GoalProgress() {
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
                   <div
-                    className={`p-2 rounded-lg ${
-                      isComplete ? "bg-green-100" : "bg-gray-50 text-gray-400"
-                    }`}
+                    className={`p-2 rounded-lg ${isComplete ? "bg-green-100" : "bg-gray-50 text-gray-400"}`}
                   >
                     {isComplete ? (
                       <FiTrendingUp size={20} className="text-green-600" />

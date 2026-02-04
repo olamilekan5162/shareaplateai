@@ -16,6 +16,7 @@ import {
   recordExpiration,
   getMetrics,
 } from "./routes/outcomes.js";
+import { generateCoachMessage } from "./routes/coach.js";
 
 const app = express();
 app.use(cors());
@@ -24,7 +25,7 @@ app.use(express.json());
 const genAI = trackGemini(
   new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY,
-  }),
+  })
 );
 
 // Legacy generate endpoint
@@ -33,7 +34,7 @@ app.post("/generate", async (req, res) => {
     const { prompt } = req.body;
 
     const result = await genAI.models.generateContent({
-      model: "gemini-2.5-flash",
+      model: "gemini-2.5-flash-lite",
       contents: prompt,
     });
 
@@ -60,7 +61,11 @@ app.get("/api/goals/:userId/progress", getGoalProgress);
 // Outcomes endpoints
 app.post("/api/outcomes/claim", recordClaim);
 app.post("/api/outcomes/expire", recordExpiration);
+app.post("/api/outcomes/expire", recordExpiration);
 app.get("/api/outcomes/metrics", getMetrics);
+
+// Coach endpoints
+app.post("/api/coach/message", generateCoachMessage);
 
 app.listen(3001, () => {
   console.log("🤖 AI server running on http://localhost:3001");

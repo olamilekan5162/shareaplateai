@@ -19,7 +19,7 @@ export function PendingClaimsSection() {
     if (claims && claims.length > 0) {
       // Filter claims for listings owned by this donor
       const donorClaims = claims.filter(
-        (claim) => claim.listing?.donor_id === user?.id
+        (claim) => claim.listing?.donor_id === user?.id,
       );
 
       setPendingClaims(donorClaims.filter((c) => c.status === "pending"));
@@ -58,7 +58,7 @@ export function PendingClaimsSection() {
   const handleComplete = async (claimId) => {
     if (
       confirm(
-        "Mark this claim as completed? This confirms the food was picked up."
+        "Mark this claim as completed? This confirms the food was picked up.",
       )
     ) {
       setActionLoading(claimId);

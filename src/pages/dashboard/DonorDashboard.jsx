@@ -11,6 +11,7 @@ import { GoalProgress } from "../../components/GoalProgress";
 import { GoalPrompt } from "../../components/GoalPrompt";
 import { useGoals } from "../../hooks/useGoals";
 import { useState, useEffect } from "react";
+import { ImpactCoach } from "../../components/ImpactCoach";
 
 export function DonorDashboard() {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ export function DonorDashboard() {
 
   // Calculate stats from real data
   const activeListings = listings.filter(
-    (l) => l.status === "available",
+    (l) => l.status === "available"
   ).length;
 
   const formatExpiry = (expiryDate) => {
@@ -71,6 +72,15 @@ export function DonorDashboard() {
           List Food
         </Button>
       </PageHeader>
+
+      <ImpactCoach
+        role="donor"
+        stats={{
+          activeListings,
+          totalListings: listings.length,
+        }}
+        goals={goals}
+      />
 
       {/* Stats Row */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
