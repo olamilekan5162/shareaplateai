@@ -20,7 +20,7 @@ export function RecipientDashboard() {
   const [category, setCategory] = useState("all");
   const { user } = useAuth();
   const { listings, loading } = useListings({ status: "available" });
-  const { createClaim, claims } = useClaims();
+  const { createClaim, claims, loading: claimsLoading } = useClaims();
   const { getRecommendations } = useFoodMatching();
   const [claiming, setClaiming] = useState(null);
   const [recommendedListings, setRecommendedListings] = useState([]);
@@ -120,7 +120,7 @@ export function RecipientDashboard() {
           claims: claims?.length || 0,
         }}
         goals={goals}
-        isReady={!loading && !goalsLoading}
+        isReady={!loading && !goalsLoading && !claimsLoading}
       />
 
       {/* Filters */}

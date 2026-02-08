@@ -12,6 +12,28 @@ export function ImpactCoach({ role, stats, goals, isReady = false }) {
       return;
     }
 
+    // Additional validation: ensure we have actual data, not just finished loading
+    // This prevents sending empty stats/goals to the API
+    const hasValidData = () => {
+      if (role === "donor") {
+        // For donors, we need listings data (even if 0, it should be a number, not undefined)
+        return (
+          stats &&
+          typeof stats.activeListings === "number" &&
+          typeof stats.totalListings === "number"
+        );
+      } else if (role === "recipient") {
+        // For recipients, we need claims data
+        return stats && typeof stats.claims === "number";
+      }
+      return false;
+    };
+
+    if (!hasValidData()) {
+      console.log("Impact Coach: Waiting for data to populate...");
+      return;
+    }
+
     // Create a stable key for caching based on role
     const cacheKey = `impact_coach_${role}`;
 
@@ -61,13 +83,10 @@ export function ImpactCoach({ role, stats, goals, isReady = false }) {
     }
 
     fetchMessage();
-    // We intentionally ignore stats/goals object reference changes
-    // and rely on the cache expiration or manual refresh if needed.
-    // To be safer against infinite loops, we disable the exhaustive-deps warning for this specific case
-    // or we could use JSON.stringify(stats) in the dependency array if we wanted strict updates.
-    // For now, caching is the priority protection.
+    // We use JSON.stringify to create stable references for stats and goals
+    // This ensures we re-fetch if the actual data changes (not just the object reference)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [role, isReady]);
+  }, [role, isReady, JSON.stringify(stats), JSON.stringify(goals)]);
 
   if (!isVisible || (!message && !loading)) return null;
 

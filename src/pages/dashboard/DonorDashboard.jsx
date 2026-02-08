@@ -16,9 +16,14 @@ import { ImpactCoach } from "../../components/ImpactCoach";
 export function DonorDashboard() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  // Fetch available listings for display
   const { listings, loading } = useListings({
     donor_id: user?.id,
     status: "available",
+  });
+  // Fetch ALL listings for accurate total count
+  const { listings: allListings, loading: allListingsLoading } = useListings({
+    donor_id: user?.id,
   });
   const { goals, loading: goalsLoading } = useGoals();
   const [showGoalPrompt, setShowGoalPrompt] = useState(false);
@@ -35,9 +40,7 @@ export function DonorDashboard() {
   }, [goalsLoading, goals]);
 
   // Calculate stats from real data
-  const activeListings = listings.filter(
-    (l) => l.status === "available",
-  ).length;
+  const activeListings = listings.length; // Already filtered by status="available"
 
   const formatExpiry = (expiryDate) => {
     const now = new Date();
@@ -77,10 +80,10 @@ export function DonorDashboard() {
         role="donor"
         stats={{
           activeListings,
-          totalListings: listings.length,
+          totalListings: allListings.length,
         }}
         goals={goals}
-        isReady={!loading && !goalsLoading}
+        isReady={!loading && !goalsLoading && !allListingsLoading}
       />
 
       {/* Stats Row */}

@@ -59,6 +59,24 @@ ShareAPlate AI uses intelligent matching algorithms to connect food donors (rest
 
 ---
 
+## 🔍 Opik Integration
+
+ShareAPlate AI uses **Opik** to trace and evaluate all AI interactions, providing full observability into:
+
+### What We Track
+
+- **Food Matching**: Every recommendation generated, including prompt, response, and metadata
+- **Impact Coach**: Motivational message generation with user context
+- **Goal Progress**: AI-driven insights and suggestions
+
+### Viewing Traces
+
+1. Log in to your Opik dashboard
+2. Navigate to the "ShareAPlate AI" project
+3. View traces, filter by metadata, and analyze performance
+
+---
+
 ## 📁 Project Structure
 
 ```
@@ -155,24 +173,6 @@ Visit `http://localhost:5173` to see the app!
 
 ---
 
-## 🔍 Opik Integration
-
-ShareAPlate AI uses **Opik** to trace and evaluate all AI interactions, providing full observability into:
-
-### What We Track
-
-- **Food Matching**: Every recommendation generated, including prompt, response, and metadata
-- **Impact Coach**: Motivational message generation with user context
-- **Goal Progress**: AI-driven insights and suggestions
-
-### Viewing Traces
-
-1. Log in to your Opik dashboard
-2. Navigate to the "ShareAPlate AI" project
-3. View traces, filter by metadata, and analyze performance
-
----
-
 ## 🚢 Deployment
 
 ### Frontend (Vercel/Netlify)
@@ -182,7 +182,7 @@ npm run build
 # Deploy the `dist` folder
 ```
 
-### AI Server (Render/Railway)
+### AI Server (Render/koyeb)
 
 - **Build Command**: `npm install`
 - **Start Command**: `node server.js`
@@ -204,7 +204,7 @@ Contributions are welcome! Please:
 
 ## 📄 License
 
-This project is licensed under the ISC License.
+This project is licensed under the MIT License.
 
 ---
 
