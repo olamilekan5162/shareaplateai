@@ -76,7 +76,8 @@ export function RecipientDashboard() {
 
     // Check if current user has an active claim on this listing
     const userActiveClaim = claims?.find(
-      (claim) => claim.listing_id === listing.id && claim.status !== "cancelled"
+      (claim) =>
+        claim.listing_id === listing.id && claim.status !== "cancelled",
     );
 
     if (userActiveClaim) {
@@ -116,9 +117,10 @@ export function RecipientDashboard() {
       <ImpactCoach
         role="recipient"
         stats={{
-          claims: claims.length,
+          claims: claims?.length || 0,
         }}
         goals={goals}
+        isReady={!loading && !goalsLoading}
       />
 
       {/* Filters */}

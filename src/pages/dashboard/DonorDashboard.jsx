@@ -36,7 +36,7 @@ export function DonorDashboard() {
 
   // Calculate stats from real data
   const activeListings = listings.filter(
-    (l) => l.status === "available"
+    (l) => l.status === "available",
   ).length;
 
   const formatExpiry = (expiryDate) => {
@@ -80,6 +80,7 @@ export function DonorDashboard() {
           totalListings: listings.length,
         }}
         goals={goals}
+        isReady={!loading && !goalsLoading}
       />
 
       {/* Stats Row */}

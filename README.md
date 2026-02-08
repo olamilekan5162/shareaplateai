@@ -1,205 +1,220 @@
-# 🍽️ ShareAplate AI
+# ShareAPlate AI 🍽️
 
-**AI-powered community food rescue platform**
+**An AI-powered food rescue platform connecting donors with recipients to reduce food waste and fight hunger.**
 
----
-
-## 🌍 Overview
-
-**ShareAplate AI** is a full-stack web application that helps communities reduce food waste and fight hunger by intelligently matching surplus food from donors to people and organizations in need.
-
-The platform uses **LLM-powered agents** to:
-
-- Match food donations to the best nearby recipients
-- Help users stay consistent with their social-impact goals
-- Improve trust and safety in food sharing
-
-This project is built for the **Social & Community Impact** track of the hackathon and aligns with the theme:
-
-> _“Build AI-powered applications that help people actually achieve their 2026 goals.”_
+ShareAPlate AI uses intelligent matching algorithms to connect food donors (restaurants, grocery stores, individuals) with recipients (NGOs, shelters, community kitchens) in real-time, ensuring surplus food reaches those who need it most.
 
 ---
 
-## 🎯 Problem Statement
+## 🌟 Features
 
-- Restaurants, grocery stores, and households throw away edible food daily.
-- NGOs and shelters struggle to find food donations in real time.
-- Existing systems are slow, manual, and poorly coordinated.
-- People want to help, but lack tools that make social impact easy and consistent.
+### For Donors
 
----
+- **Post Food Listings**: Share surplus food with details like quantity, expiry date, dietary tags, and location
+- **AI-Powered Matching**: Automatic recipient recommendations based on proximity, urgency, and dietary compatibility
+- **Claims Management**: Approve, reject, or mark claims as completed
+- **Goal Tracking**: Set and monitor donation goals (e.g., "Donate 5 times per week")
+- **Impact Coach**: Receive AI-generated motivational insights based on your activity
 
-## 💡 Solution
+### For Recipients
 
-ShareAplate AI provides a **community-driven food donation platform** where:
+- **Browse Available Food**: Search and filter listings by category, location, and dietary preferences
+- **Smart Recommendations**: AI suggests the best matches based on your location and needs
+- **Claim Food**: Request food items with real-time status updates
+- **Goal Setting**: Track claims and meal service goals
+- **Notifications**: Get instant alerts for new matches and claim updates
 
-- **Donors** list surplus food before it expires
-- **Recipients (NGOs / individuals)** discover and claim nearby food
-- **Volunteers (optional)** help with pickups
-- **AI agents** optimize matching, safety, and impact
-- **Impact dashboards** show real, measurable social and environmental benefits
+### AI & Intelligence
 
----
-
-## 🧠 What Makes This an AI Project (Not Just a CRUD App)
-
-This is **not** a chatbot and **not** a basic listing platform.
-
-The intelligence lives in **backend AI agents** that:
-
-- Make decisions
-- Optimize outcomes
-- Are evaluated and improved with real metrics
+- **Gemini-Powered Matching**: Uses Google's Gemini 2.5 Flash for intelligent food-recipient pairing
+- **Opik Observability**: Full LLM tracing and evaluation for transparency and optimization
+- **Context-Aware Coaching**: Personalized motivational messages based on user stats and goals
+- **Proximity Prioritization**: Location-based scoring ensures fast pickup times
 
 ---
 
-## 🤖 AI Agents
-
-### 1️⃣ Food Matching Agent (Core Agent)
-
-**Purpose:**
-Ensure surplus food reaches the right recipient **before it expires**.
-
-**What it does:**
-
-- Analyzes:
-
-  - Food type & quantity
-  - Expiry time
-  - Donor & recipient location
-  - Dietary constraints
-
-- Ranks the best recipient options
-- Explains _why_ a match was recommended
-
-**Outcome:**
-Higher pickup success rate, less wasted food.
-
-## 🧩 Application Features
-
-### 👤 User Roles
-
-- **Donors** (restaurants, stores, individuals)
-- **Recipients** (NGOs, shelters, individuals)
-- **Volunteers** (optional)
-
----
-
-### 📋 Core Features
-
-- User registration & authentication
-- Food listing form (type, quantity, expiry, location)
-- Browse & claim food donations
-- AI-powered match recommendations
-- Real-time listing updates
-- Impact dashboard:
-
-  - Food saved (kg)
-  - Meals delivered (estimate)
-  - CO₂ emissions reduced
-
----
-
-## 🧪 Evaluation & Observability (Opik)
-
-We use **Opik** to evaluate and improve our AI agents.
-
-### What we track:
-
-- Match success rate
-- Time-to-pickup
-- Expired vs successfully delivered food
-- Agent decision consistency
-
-### What this shows judges:
-
-- Data-driven agent improvement
-- Transparent evaluation
-- Production-ready AI practices
-
----
-
-## 🏗️ Technical Architecture
+## 🛠️ Tech Stack
 
 ### Frontend
 
-- **React**
-- **Tailwind CSS**
+- **React 19** - Modern UI with hooks and concurrent features
+- **Vite** - Lightning-fast build tool
+- **React Router** - Client-side routing
+- **Tailwind CSS 4** - Utility-first styling
+- **React Hot Toast** - Beautiful notifications
+- **React Icons** - Icon library
 
-### Backend / Infrastructure
+### Backend
 
-- **Supabase**
+- **Supabase** - PostgreSQL database, authentication, and real-time subscriptions
+- **Express.js** - AI server for Gemini integration
+- **Google Gemini AI** - LLM for matching, coaching, and content generation
+- **Opik** - LLM observability and tracing platform
 
-  - Authentication
-  - Database
-  - Realtime updates
+### AI & Observability
 
-### AI & Agents
-
-- LLM APIs (OpenAI / Gemini)
-- Serverless API routes for agent logic
-
-### Observability
-
-- **Opik** (agent evaluation, experiment tracking)
-
-### Deployment
-
-- Vercel
+- **opik-gemini** - Gemini SDK wrapper for automatic tracing
+- **Opik Dashboard** - Monitor prompts, responses, and performance metrics
+- **Custom Metadata** - Track business metrics (user_id, location, match_score, etc.)
 
 ---
 
-## 🔄 Example Flow
+## 📁 Project Structure
 
-1. Donor lists surplus food
-2. Food Matching Agent evaluates best recipients
-3. Recommendation is logged and evaluated in Opik
-4. Recipient claims food
-5. Impact metrics are updated in real time
-
----
-
-## 🏆 Hackathon Alignment
-
-### Track Fit: Social & Community Impact
-
-- Fosters community connection
-- Reduces food waste
-- Supports vulnerable populations
-- Creates measurable environmental impact
-
-### Theme Fit: 2026 Goals
-
-- Helps users build sustainable giving habits
-- Encourages long-term social responsibility
-
-### Bonus: Best Use of Opik
-
-- Clear agent evaluation
-- Experiment tracking
-- Data-backed improvements
+```
+ShareAPlateAi/
+├── src/                      # Frontend React application
+│   ├── components/           # Reusable UI components
+│   ├── pages/                # Dashboard pages (Donor, Recipient, etc.)
+│   ├── hooks/                # Custom React hooks (useAuth, useListings, etc.)
+│   ├── lib/                  # Supabase client and utilities
+│   └── index.css             # Global styles
+├── ai_server/                # AI backend server
+│   ├── routes/               # API endpoints
+│   │   ├── matching.js       # Food matching logic
+│   │   ├── coach.js          # Impact Coach messages
+│   │   ├── goals.js          # Goal management
+│   │   └── outcomes.js       # Metrics tracking
+│   ├── utils/                # Email notifications, etc.
+│   └── server.js             # Express server entry point
+├── DATABASE_SCHEMA_COMPLETE.sql  # Full database schema
+└── package.json              # Frontend dependencies
+```
 
 ---
 
-## 🚀 MVP Scope (Hackathon-Ready)
+## 🚀 Getting Started
 
-**Must-have:**
+### Prerequisites
 
-- Auth + dashboards
-- Food listing & claiming
-- One fully working AI agent
-- Opik integration
-- Impact metrics
+- Node.js 18+ and npm
+- Supabase account ([supabase.com](https://supabase.com))
+- Google AI Studio API key ([aistudio.google.com](https://aistudio.google.com))
+- Opik account ([comet.com/opik](https://www.comet.com/site/products/opik/))
 
-**Nice-to-have:**
+### 1. Clone the Repository
 
-- Volunteer routing
-- QR pickup verification
-- Gamified badges
+```bash
+git clone https://github.com/olamilekan5162/shareaplateai.git
+cd shareaplateai
+```
+
+### 2. Install Dependencies
+
+```bash
+# Frontend
+npm install
+
+# AI Server
+cd ai_server
+npm install
+cd ..
+```
+
+### 3. Set Up Environment Variables
+
+**Frontend (`.env.local`):**
+
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+VITE_AI_SERVER_URL=http://localhost:3001
+```
+
+**AI Server (`ai_server/.env`):**
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_KEY=your_supabase_service_role_key
+OPIK_API_KEY=your_opik_api_key
+OPIK_WORKSPACE=your_opik_workspace
+```
+
+### 4. Set Up Database
+
+Run the SQL schema in your Supabase SQL Editor:
+
+```bash
+# Copy the contents of DATABASE_SCHEMA_COMPLETE.sql
+# Paste into Supabase SQL Editor and run
+```
+
+### 5. Run the Application
+
+```bash
+# Terminal 1: Frontend
+npm run dev
+
+# Terminal 2: AI Server
+cd ai_server
+npm start
+```
+
+Visit `http://localhost:5173` to see the app!
 
 ---
 
-## 🧠 Key Idea to Remember
+## 🔍 Opik Integration
 
-> **ShareAplate AI is a real product first — and an AI system second.**
-> The web app enables usage, the agents create intelligence, and Opik proves it works.
+ShareAPlate AI uses **Opik** to trace and evaluate all AI interactions, providing full observability into:
+
+### What We Track
+
+- **Food Matching**: Every recommendation generated, including prompt, response, and metadata
+- **Impact Coach**: Motivational message generation with user context
+- **Goal Progress**: AI-driven insights and suggestions
+
+### Viewing Traces
+
+1. Log in to your Opik dashboard
+2. Navigate to the "ShareAPlate AI" project
+3. View traces, filter by metadata, and analyze performance
+
+---
+
+## 🚢 Deployment
+
+### Frontend (Vercel/Netlify)
+
+```bash
+npm run build
+# Deploy the `dist` folder
+```
+
+### AI Server (Render/Railway)
+
+- **Build Command**: `npm install`
+- **Start Command**: `node server.js`
+- Set environment variables in the hosting dashboard
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the ISC License.
+
+---
+
+## 🙏 Acknowledgments
+
+- **Google Gemini** for powerful AI capabilities
+- **Opik** for LLM observability
+- **Supabase** for backend infrastructure
+- The open-source community for amazing tools
+
+---
+
+**Built with ❤️ to reduce food waste and fight hunger.**

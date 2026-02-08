@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import { FiX, FiZap } from "react-icons/fi";
 
-export function ImpactCoach({ role, stats, goals }) {
+export function ImpactCoach({ role, stats, goals, isReady = false }) {
   const [message, setMessage] = useState("");
   const [isVisible, setIsVisible] = useState(true);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Don't fetch if data isn't ready yet
+    if (!isReady || !role) {
+      return;
+    }
+
     // Create a stable key for caching based on role
     const cacheKey = `impact_coach_${role}`;
 
@@ -33,7 +38,7 @@ export function ImpactCoach({ role, stats, goals }) {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ role, stats, goals }),
-          }
+          },
         );
         const data = await response.json();
         if (data.message) {
@@ -44,7 +49,7 @@ export function ImpactCoach({ role, stats, goals }) {
             JSON.stringify({
               message: data.message,
               timestamp: Date.now(),
-            })
+            }),
           );
         }
       } catch (err) {
@@ -55,10 +60,14 @@ export function ImpactCoach({ role, stats, goals }) {
       }
     }
 
-    if (role) {
-      fetchMessage();
-    }
-  }, [role]);
+    fetchMessage();
+    // We intentionally ignore stats/goals object reference changes
+    // and rely on the cache expiration or manual refresh if needed.
+    // To be safer against infinite loops, we disable the exhaustive-deps warning for this specific case
+    // or we could use JSON.stringify(stats) in the dependency array if we wanted strict updates.
+    // For now, caching is the priority protection.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [role, isReady]);
 
   if (!isVisible || (!message && !loading)) return null;
 
